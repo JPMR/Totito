@@ -9,7 +9,7 @@ def iniciar():
     global Movidas, jugadores, Teclas
     #guardamos los jugadores
     jugador1 = input("ingresa nombre del jugador 1")
-    jugador2 = input("ingresa nombre del jugador 2")
+    jugador2 = input("ingresa nombre del jugador 2, para jugar con la pc, escribe 'pc'")
     jugadores = {"X":jugador1,  "O":jugador2}
     #Se piden los 9 caracteres
     Teclas = ""
@@ -36,7 +36,10 @@ def game_pvp():
     while (Termino == False):
         print_game()
         print("turno, jugador: " + jugadores[icono])
-        pedir_posicion(icono)
+        if jugadores[icono] == "pc":
+            movida_pc()
+        else:
+            pedir_posicion(icono)
         Termino = hay_ganador(icono)
         print(Termino)
         #cambiamos de turno
@@ -52,6 +55,44 @@ def game_pvp():
             break
         elif (seguir == "n"):
             break
+def game_pve():
+    global jugadores
+    Termino = False
+    rand = random.randint(0,1)
+    if rand == 0:
+        icono = "X"
+        b = "O"
+    elif rand == 1:
+        icono = "O"
+        b = "X"
+    c = ""
+    while (Termino == False):
+        print_game()
+        print("turno, jugador: " + jugadores[icono])
+        pedir_posicion(icono)
+        Termino = hay_ganador(icono)
+        if not(Termino == False):
+            break
+        
+        Termino = hay_ganador(icono)
+        
+    print_game()
+    print("GANADOR: " +  jugadores[Termino])
+    while True:
+        seguir = input("Desea seguir jugando? y/n\n").lower()
+        if(seguir == "y"):
+            game_pve()
+            break
+        elif (seguir == "n"):
+            break
+
+def movida_pc():
+    global Teclas, Movidas
+    coordenada = Teclas[random.randint(0,8)]
+    #Se verifica que la cordenada sea correcta
+    while not(Movidas[coordenada] != "X" and Movidas[coordenada] != "O"):
+        coordenada = Teclas[random.randint(0,8)]
+    Movidas.update({coordenada:"O"})
 
 def hay_ganador(icono):
     global Movidas
