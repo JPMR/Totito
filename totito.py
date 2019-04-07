@@ -15,13 +15,14 @@ def iniciar():
     clean_console()
     global Movidas, jugadores, Modo_juego, pc_name
     #guardamos los jugadores
-    jugador1 = input("Ingresa nombre del jugador 1")
+    jugador1 = input("Ingresa nombre del jugador 1\n")
     clean_console()
     jugador2 = input("Ingresa nombre del jugador 2 \n*Para jugar con la pc, escribe pc\n")
     clean_console()
     if jugador2 == "pc":
         pc_name = pc_name_generator()
         print("nombre de la maquina: " + pc_name)
+        print()
     jugadores = {"X":jugador1,  "O":jugador2}
     Modo_juego = input("Ingresa modo de juego (normal/miseria): ")
     while not(Modo_juego in ["normal", "miseria"]):
@@ -31,7 +32,7 @@ def iniciar():
     while not(teclas_correctas):
         guardar_teclas()
         print_game()
-        print("Las teclas estan corrrectas? y/n")
+        print("Las teclas estan corrrectas? y/n: ")
         r = input("").lower()
         while not(r in ["y", "n"]):
             r = input("y/n: ").lower()
@@ -97,7 +98,7 @@ def game_pvp():
             print("GANADOR: " + jugadores[Termino])
     #se pregunta si sigue jugando o no
     while True:
-        seguir = input("Desea seguir jugando? y/n\n").lower()
+        seguir = input("Desea seguir jugando? y/n: \n").lower()
         if(seguir == "y"):
             iniciar()
             break
@@ -142,10 +143,10 @@ def hay_ganador(icono):
 def pedir_posicion(jugador):
     '''toma la jugada, verifica que sea valida y la guarda'''
     global Movidas
-    coordenada = input("Ingresa posicion").lower()
+    coordenada = input("Ingresa posicion: ").lower()
     #Se verifica que la cordenada sea correcta
     while not(coordenada in Movidas and Movidas[coordenada] != "X" and Movidas[coordenada] != "O"):
-        coordenada = input("Ingresa posicion correcta").lower()
+        coordenada = input("Ingresa posicion correcta: ").lower()
     Movidas.update({coordenada:jugador})
 #muestra el tablero
 def print_game():
