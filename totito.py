@@ -45,6 +45,13 @@ def game_pvp():
         b = c
     print_game()
     print("GANADOR: " + jugadores[Termino])
+    while True:
+        seguir = input("Desea seguir jugando? y/n\n").lower()
+        if(seguir == "y"):
+            iniciar()
+            break
+        elif (seguir == "n"):
+            break
 
 def hay_ganador(icono):
     global Movidas
