@@ -39,17 +39,15 @@ def iniciar():
         if r == "y":
             teclas_correctas = True
     game_pvp()
+
+
+    
 #se guardan teclas como coordenadas o posiciones
 def guardar_teclas():
     '''Guarda 9 teclas en una string (global Teclas) y en un diccionario (global Movidas), cada una como su propio key y value'''
     global Teclas, Movidas
     #Se piden los 9 caracteres
-    Teclas = ""
-    Teclas = input("ingresa, sin espacios, las teclas para las coordenadas\nDeben ser 9 en total\n")
-    while(len(Teclas) != 9):
-        print("----asegurate de ingresar un total de 9 teclas----")
-        Teclas = input("ingresa, sin espacios, las teclas para las coordenadas\nDeben ser 9 en total\n")
-    Teclas = Teclas.lower()
+    Teclas = recibir_teclas()
     #se guardan los caracteres y creamos un diccionario con ellos
     for x in Teclas:
         Movidas.update({x:x})
@@ -69,6 +67,7 @@ def game_pvp():
     c = ""
     #mientras no ha teminado, preguntamos por movida
     while (Termino == False):
+        clean_console()
         print_game()
         #si es pc, elige random, contrario se pide respuesta
         if jugadores[icono] == "pc":
@@ -104,6 +103,12 @@ def game_pvp():
             break
         elif (seguir == "n"):
             break
+
+def seguir_jugando():
+    while True:
+            seguir = input("1 - Seguir jugando: \n2 - Cambiar nombres \n3 - Cambiar modo 4 - Salir").lower()
+            if seguir == "1":
+                print()
 #obtiene una movida de la computadora
 def movida_pc():
     '''elije una movida con random'''
@@ -189,6 +194,7 @@ def clean_console():
     os.system('cls')
 #genera un nombre aleatorio (not working)
 def pc_name_generator():
+    '''genera un nombre uniendo vocales y letras y añade un titulo'''
     titles = [" elastico", """ carmesí""", " volador", " robacaramelos", " aterragnomos", ", Defensor de un mundo destrozado", """ el Maníaco Enmascarado""", " JENKINS", ", la Mente Envenenada", ", la vaca dorada", " gelatinico", " del planeta chocolate", " del equipo moradito"]
     nom = ""
     vocals = "aeiou"
@@ -198,13 +204,34 @@ def pc_name_generator():
         nom = nom + funny_consonant[random.randint(0,11)]
     nom = nom + titles[random.randint(0,12)]
     return(nom)
+#recibe teclas
+def recibir_teclas():
+    '''recibe un input y verifica que sean 9 y sin repetidos'''
+    #Se piden los 9 caracteres
+    Teclas = ""
+    Teclas = input("Ingresa, sin espacios, las teclas para las coordenadas\n"+ """ejemplo:
+                    q | w | e
+                    ---------
+    qweasdzxc =>    a | s | d
+                    ---------
+                    z | x | c
+    
+    teclas: """).lower()
+    for x in Teclas:
+        if len(Teclas.split(x)) > 2:
+            Teclas = ""
+    while(len(Teclas) != 9):
+        print("----asegurate de ingresar un total de 9 teclas diferentes----")
+        Teclas = input("Ingresa, sin espacios, las teclas para las coordenadas\n").lower()
+        #verifica que en las teclas no haya algo repetido
+        for x in Teclas:
+            if len(Teclas.split(x)) > 2:
+                Teclas = ""
+    Teclas = Teclas.lower()
+    return Teclas
+
+
 iniciar()
-
-
-
-
-
-
 
 
 
