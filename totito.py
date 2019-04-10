@@ -13,7 +13,21 @@ def iniciar():
     '''toma los nombres, teclas a usar y modo de juego'''
     cfont.init()
     clean_console()
-    global Movidas, jugadores, Modo_juego, pc_name
+    definir_usuarios()
+    definir_modo_juego()
+    guardar_teclas()
+    game_pvp()
+#guarda modo de juego
+def definir_modo_juego():
+    '''Guarda modo de juego'''
+    global  Modo_juego
+    Modo_juego = input("Ingresa modo de juego (normal/miseria): ")
+    while not(Modo_juego in ["normal", "miseria"]):
+        Modo_juego = input("Ingresa modo de juego (normal/miseria): ")
+#guarda los usuarios (o pc)
+def definir_usuarios():
+    '''se reciben los jugadores (la opcion de pc tambien)'''
+    global jugadores, pc_name
     #guardamos los jugadores
     jugador1 = input("Ingresa nombre del jugador 1\n")
     clean_console()
@@ -24,13 +38,19 @@ def iniciar():
         print("nombre de la maquina: " + pc_name)
         print()
     jugadores = {"X":jugador1,  "O":jugador2}
-    Modo_juego = input("Ingresa modo de juego (normal/miseria): ")
-    while not(Modo_juego in ["normal", "miseria"]):
-        Modo_juego = input("Ingresa modo de juego (normal/miseria): ")
+#se guardan teclas como coordenadas o posiciones
+def guardar_teclas():
+    '''Guarda 9 teclas en una string (global Teclas) y en un diccionario (global Movidas), cada una como su propio key y value'''
+    global Teclas, Movidas
     teclas_correctas = False
     clean_console()
     while not(teclas_correctas):
-        guardar_teclas()
+        global Teclas, Movidas
+        #Se piden los 9 caracteres
+        Teclas = recibir_teclas()
+        #se guardan los caracteres y creamos un diccionario con ellos
+        for x in Teclas:
+            Movidas.update({x:x})
         print_game()
         print("Las teclas estan corrrectas? y/n: ")
         r = input("").lower()
@@ -38,19 +58,6 @@ def iniciar():
             r = input("y/n: ").lower()
         if r == "y":
             teclas_correctas = True
-    game_pvp()
-
-
-    
-#se guardan teclas como coordenadas o posiciones
-def guardar_teclas():
-    '''Guarda 9 teclas en una string (global Teclas) y en un diccionario (global Movidas), cada una como su propio key y value'''
-    global Teclas, Movidas
-    #Se piden los 9 caracteres
-    Teclas = recibir_teclas()
-    #se guardan los caracteres y creamos un diccionario con ellos
-    for x in Teclas:
-        Movidas.update({x:x})
 #alternamos entre turnos de cada jugador "maneja el juego"
 def game_pvp():
     '''alterna turnos y muestra el ganador'''
@@ -96,19 +103,30 @@ def game_pvp():
                 Termino = "X"
             print("GANADOR: " + jugadores[Termino])
     #se pregunta si sigue jugando o no
-    while True:
-        seguir = input("Desea seguir jugando? y/n: \n").lower()
-        if(seguir == "y"):
-            iniciar()
-            break
-        elif (seguir == "n"):
-            break
-
+    seguir_jugando()
+#menu para cambiar alguna opcion
 def seguir_jugando():
+    global Teclas, Movidas
+    #reiniciamos el tablero
+    for x in Teclas:
+        Movidas.update({x:x})
     while True:
-            seguir = input("1 - Seguir jugando: \n2 - Cambiar nombres \n3 - Cambiar modo 4 - Salir").lower()
-            if seguir == "1":
-                print()
+        seguir = input("\nQue deseas hacer? (elige un numero)\n1 - Seguir jugando: \n2 - Cambiar nombres \n3 - Cambiar modo \n4 - Cambiar teclas\n5 - Salir\n").lower()
+        clean_console()
+        if seguir == "1":
+            game_pvp()
+            break
+        elif seguir == "2":
+            definir_usuarios()
+            break
+        elif seguir == "3":
+            definir_modo_juego()
+            break
+        elif seguir == "4":
+            guardar_teclas()
+            break
+        elif seguir == "5":
+            break
 #obtiene una movida de la computadora
 def movida_pc():
     '''elije una movida con random'''
